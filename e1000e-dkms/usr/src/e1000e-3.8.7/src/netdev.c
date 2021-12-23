@@ -4723,7 +4723,7 @@ void e1000e_reset(struct e1000_adapter *adapter)
 
 /**
  * e1000e_trigger_lsc - trigger an LSC interrupt
- * @adapter: 
+ * @adapter:
  *
  * Fire a link status change interrupt to start the watchdog.
  **/
@@ -8618,7 +8618,13 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	/* systems with ASPM and others may see the checksum fail on the first
 	 * attempt. Let's give it a few tries
 	 */
-	for (i = 0;; i++) {
+	/* FIXME: Remov checksum check due to error:
+	 * - https://www.dell.com/community/Precision-Mobile-Workstations/Precision-7560-e1000e-module-error-the-NVM-Checksum-Is-Not-Valid/td-p/8064069
+	 * - https://www.dell.com/community/Linux-Developer-Systems/Precision-7560-won-t-boot-with-Network-Enabled/m-p/8079627/highlight/true#M9464
+	 * - https://bugzilla.kernel.org/show_bug.cgi?id=213667
+	 * - https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1936998
+	 */
+	/*for (i = 0;; i++) {
 		if (e1000_validate_nvm_checksum(&adapter->hw) >= 0)
 			break;
 		if (i == 2) {
@@ -8627,7 +8633,7 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 			err = -EIO;
 			goto err_eeprom;
 		}
-	}
+	}*/
 
 	e1000_eeprom_checks(adapter);
 
